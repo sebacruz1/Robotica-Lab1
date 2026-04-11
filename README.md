@@ -8,7 +8,6 @@ Este repositorio contiene la implementación de un controlador básico para un r
 1. [Descripción del Laboratorio](#1-descripción-del-laboratorio)
 2. [Instrucciones de Ejecución](#2-instrucciones-de-ejecución)
 3. [Resultados Obtenidos](#3-resultados-obtenidos)
-4. [Metodología](#4-metodología)
 
 ---
 
@@ -51,7 +50,7 @@ Este repositorio contiene la implementación de un controlador básico para un r
 ### Preguntas de análisis
 
 1. ¿Qué ocurre cuando ambas ruedas tienen la misma velocidad?
-- Velocidades iguales: derecho
+- Velocidades iguales: avanza en línea recta
 
 2. ¿Cómo cambia la trayectoria cuando las velocidades son diferentes?  
 - Velocidad derecha mayor: gira en circulos hacia su izquierda
