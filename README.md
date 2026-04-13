@@ -1,4 +1,3 @@
-![WhatsApp Image 2026-04-12 at 20 46 14](https://github.com/user-attachments/assets/f0f5db1b-ac91-4c08-95e1-3394ceb6e928)
 # Robotica-Lab1
 
 > **ICI 4150 – Robótica y Sistemas Autónomos 2026-01**
