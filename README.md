@@ -1,63 +1,134 @@
 # Robotica-Lab1
 
-Este repositorio contiene la implementación de un controlador básico para un robot móvil diferencial utilizando el simulador **Webots**. El proyecto permite gestionar el movimiento del robot en tiempo real mediante comandos de teclado.
+> **ICI 4150 – Robótica y Sistemas Autónomos 2026-01**
+> Laboratorio 1: Simulación de un robot móvil diferencial en Webots
 
 ---
 
-# Contenido
-1. [Descripción del Laboratorio](#1-descripción-del-laboratorio)
-2. [Instrucciones de Ejecución](#2-instrucciones-de-ejecución)
-3. [Resultados Obtenidos](#3-resultados-obtenidos)
+## Descripción
+
+Este laboratorio simula el comportamiento cinemático de un robot móvil diferencial (e-puck) en Webots. Se implementaron dos modos de operación:
+
+- **Control manual**: el usuario conduce el robot en tiempo real desde el teclado.
+- **Secuencias automáticas**: el robot ejecuta una serie de trayectorias predefinidas (línea recta, curva, giro en sitio, círculo, cuadrado).
+
+El objetivo es comprender cómo las velocidades individuales de cada rueda determinan el movimiento del robot, aplicando el modelo cinemático diferencial.
 
 ---
 
-## 1. Descripción del Laboratorio
-[cite_start]El objetivo principal es comprender y aplicar la cinemática de un robot diferencial[cite: 1]. [cite_start]El movimiento se controla ajustando las velocidades de los motores izquierdo y derecho basándose en la entrada del usuario capturada por el teclado[cite: 1].
+## Cómo ejecutar la simulación
 
-### Lógica de Movimiento
-[cite_start]De acuerdo a las reglas de navegación establecidas para este modelo[cite: 1]:
-* [cite_start]**Avance recto:** Ambas ruedas giran a la misma velocidad ($V_i = V_d$)[cite: 1].
-* [cite_start]**Giro a la izquierda:** La rueda derecha tiene una velocidad mayor que la izquierda ($V_d > V_i$)[cite: 1].
-* [cite_start]**Giro a la derecha:** La rueda izquierda tiene una velocidad mayor que la derecha ($V_i > V_d$)[cite: 1].
-* [cite_start]**Rotación sobre su propio eje:** Las ruedas giran en direcciones opuestas[cite: 1].
-* [cite_start]**Trayectoria circular:** Se recomienda una relación de velocidad donde una rueda sea el doble de la otra[cite: 1].
+### 1. Clonar el repositorio
 
-## 2. Instrucciones de Ejecución
+```bash
+git clone https://github.com/sebacruz1/Robotica-Lab1
+```
 
-### Requisitos
-* [cite_start]Simulador **Webots** instalado[cite: 1].
-* [cite_start]Python 3.x configurado como intérprete en el simulador[cite: 1].
+### 2. Abrir el mundo en Webots
 
-### Pasos para Simular
-1. Clone este repositorio en su máquina local.
-2. Abra el archivo de mundo en Webots.
-3. [cite_start]Asegúrese de que el robot tenga asignado el script `controlador_robot.py`[cite: 1].
-4. Inicie la simulación presionando el botón **Play**.
-5. [cite_start]Haga clic en la ventana 3D de Webots y utilice las **flechas del teclado** para mover el robot[cite: 1]:
-    * [cite_start]**↑ / ↓**: Control de velocidad lineal (adelante/atrás)[cite: 1].
-    * [cite_start]**← / →**: Control de velocidad angular (giros)[cite: 1].
+1. Abrir Webots.
+2. Ir a File -> Open World.
+3. Seleccionar `worlds/Lab1.wbt`.
 
-## 3. Resultados Obtenidos
-[cite_start]El controlador procesa las entradas para calcular las velocidades de cada motor, limitándolas a un máximo de $\pm 5.0$ para mantener la estabilidad[cite: 1].
+El mundo contiene dos instancias del robot e-puck:
 
-| Comando | Acción | Impacto en Velocidad |
-| :--- | :--- | :--- |
-| **Flecha Arriba** | Adelante | [cite_start]`linear` +5.0 [cite: 1] |
-| **Flecha Abajo** | Atrás | [cite_start]`linear` -5.0 [cite: 1] |
-| **Flecha Izquierda** | Giro Izq. | [cite_start]`angular` +2.0 [cite: 1] |
-| **Flecha Derecha** | Giro Der. | [cite_start]`angular` -2.0 [cite: 1] |
+| Robot           | Controlador                    | Descripción                         |
+| --------------- | ------------------------------ | ----------------------------------- |
+| `e-puck_manual` | `controlador_robot_manual`     | Control en tiempo real por teclado  |
+| `e-puck tests`  | `controlador_test_automaticos` | Secuencias automáticas predefinidas |
 
-### Preguntas de análisis
+> **Nota:** El robot controlado manualmente (`e-puck_manual`) tiene sus LEDs encendidos, lo que permite identificarlo visualmente dentro de la simulación.
 
-1. ¿Qué ocurre cuando ambas ruedas tienen la misma velocidad?
-- Velocidades iguales: avanza en línea recta
+### 3. Ejecutar la simulación
 
-2. ¿Cómo cambia la trayectoria cuando las velocidades son diferentes?  
-- Velocidad derecha mayor: gira en circulos hacia su izquierda
-- Velocidad izquierda mayor: gira en circulos hacia su derecha
+Presiona el botón **Play** (▶) en Webots.
 
-3. ¿Qué ocurre cuando una rueda gira en sentido opuesto a la otra?
-- Ruedas en direcciones distintas: gira en su propio eje
+---
 
-4. ¿Qué tipo de movimiento permite dibujar un círculo?
-- Para dibujar un circulo hay que dejar una rueda con una mayor velocidad (? el doble del otro ?
+## Control Manual
+
+El robot `e-puck_manual` responde a las siguientes teclas:
+
+| Tecla   | Acción                         |
+| ------- | ------------------------------ |
+| `↑`     | Aumenta velocidad lineal       |
+| `↓`     | Disminuye velocidad lineal     |
+| `←`     | Gira a la izquierda (ajusta ω) |
+| `→`     | Gira a la derecha (ajusta ω)   |
+| `SPACE` | Freno completo (v = 0, ω = 0)  |
+
+Las velocidades de rueda se calculan como:
+
+```python
+left_speed  = linear - angular
+right_speed = linear + angular
+```
+
+---
+
+## Secuencias Automáticas
+
+El robot `e-puck tests` ejecuta los siguientes experimentos en orden:
+
+| Experimento       | Condición                         | Resultado esperado     |
+| ----------------- | --------------------------------- | ---------------------- |
+| Línea recta       | `vr == vl`                        | Avance sin desvío      |
+| Trayectoria curva | `vr ≠ vl`                         | Arco de circunferencia |
+| Giro en sitio     | `vr == -vl`                       | Rotación sobre el eje  |
+| Círculo           | `vr` y `vl` constantes desiguales | Círculo cerrado        |
+| Cuadrado          | Alternancia recto/giro 90°        | Figura cuadrada        |
+
+Para cada secuencia se reporta en consola:
+
+```
+v = X.XX m/s   ω = X.XX rad/s
+```
+
+> **Nota:** Los mensajes de consola correspondientes a las secuencias automáticas se muestran en **color rojo**, lo que permite distinguirlos fácilmente de otros mensajes del sistema.
+
+---
+
+## Resultados
+
+ACA VA EL PANTALLAZO!
+
+### Observaciones
+
+- Cuando `vr = vl`, el robot avanza en línea recta sin rotación (`ω = 0`).
+- Cuando `vr ≠ vl`, la trayectoria curva hacia la rueda más lenta.
+- Cuando `vr = -vl`, el robot rota en su propio eje (`v = 0`).
+- Para dibujar un círculo, se mantienen velocidades constantes y distintas entre ruedas.
+
+---
+
+## Preguntas de Análisis
+
+1. **¿Qué ocurre cuando ambas ruedas tienen la misma velocidad?**
+   El robot avanza en línea recta. La velocidad angular `ω` es cero porque la diferencia `vr - vl = 0`.
+
+2. **¿Cómo cambia la trayectoria cuando las velocidades son diferentes?**
+   El robot describe una curva. El radio de curvatura es inversamente proporcional a la diferencia de velocidades.
+
+3. **¿Qué ocurre cuando una rueda gira en sentido opuesto?**
+   El robot rota sobre su propio eje. La velocidad lineal `v` es cero.
+
+4. **¿Qué tipo de movimiento permite dibujar un círculo?**
+   Velocidades constantes y distintas en ambas ruedas (`vr ≠ vl`, mismo signo), lo que produce una trayectoria circular continua de radio `R = L/2 · (vr + vl)/(vr - vl)`.
+
+---
+
+## Equipo
+
+| Rol            | Responsabilidad                | Autor                  |
+| -------------- | ------------------------------ | ---------------------- |
+| Programador    | Implementación del controlador | Sebastián Cruz         |
+| Experimentador | Ejecución de pruebas           | Maximiliano Bustamante |
+| Analista       | Interpretación de resultados   | Ignacio Ávila          |
+| Documentador   | Redacción del informe y README | Joaquín Fuenzalida     |
+| Integrador     | Coordinación del equipo        | Sebastián Cruz         |
+
+---
+
+## Licencia
+
+Proyecto académico – ICI 4150, PUCV, 2026.
